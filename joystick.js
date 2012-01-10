@@ -27,7 +27,7 @@ Crafty.c('Joystick', {
     * Crafty.e("2D, Canvas, track").attr({ x: 100, y: 100 })
     *	.joystick(
     *		Crafty.e("2D, Canvas, stick").attr({ x: 100, y: 100 }),
-    *		{ mouseDebug : true, range: 20 }
+    *		{ mouseSupport : true, range: 20 }
 	*	)	
 	*
 	*
@@ -40,8 +40,8 @@ Crafty.c('Joystick', {
 
 		this._onUp(); // move stick entity to center of base entity
 		this._range = opts.range || 20;
-		this._setVisibility( this.isTouchScreenAvailable() || opts.mouseDebug );
-		this._initializeEvents(opts.mouseDebug);
+		this._setVisibility( this.isTouchScreenAvailable() || opts.mouseSupport );
+		this._initializeEvents(opts.mouseSupport);
 		return this;
 	},
     /**@
@@ -105,16 +105,16 @@ Crafty.c('Joystick', {
     /**@
     * #._initializeEvents
     * @comp Joystick
-    * @sign public this ._initializeEvents(Bool mouseDebug)
-    * @param mouseDebug - is mouse debug for debug on NO touch machine
+    * @sign public this ._initializeEvents(Bool mouseSupport)
+    * @param mouseSupport - is mouse support for debug on NO touch devices
     * 
     */
-	_initializeEvents: function(mouseDebug){
+	_initializeEvents: function(mouseSupport){
 		Crafty.addEvent( this, Crafty.stage.elem, 'touchstart', this._onDown);
 		Crafty.addEvent( this, Crafty.stage.elem, 'touchmove'	, this._onMove);
 		Crafty.addEvent( this, Crafty.stage.elem, 'touchend'	, this._onUp);
 			
-		if (mouseDebug){
+		if (mouseSupport){
 			Crafty.addEvent( this, Crafty.stage.elem, 'mousedown', this._onDown);
 			Crafty.addEvent( this, Crafty.stage.elem, 'mousemove'	, this._onMove);
 			Crafty.addEvent( this, Crafty.stage.elem, 'mouseup'	, this._onUp);
