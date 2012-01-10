@@ -1,7 +1,7 @@
 {
-    "name": "joystick",
+    "name": "Joystick",
     "version": "0.1",
-    "title": "Joystick for touch ",
+    "title": "Joystick for touch device",
     "author": {
         "name": "Radzikowski Piotr",
         "url": ""
