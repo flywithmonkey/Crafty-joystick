@@ -1,0 +1,29 @@
+{
+    "name": "joystick",
+    "version": "0.1",
+    "title": "Joystick for touch ",
+    "author": {
+        "name": "Radzikowski Piotr",
+        "url": ""
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/mit-license.php"
+        },
+        {
+            "type": "GPL",
+            "url": "http://www.opensource.org/licenses/gpl-license.php"
+        }
+    ],
+    "description": "Joystick for touch mobile devices",
+    "keywords": [
+        "joystick",
+        "javascript",
+        "Crafty"
+    ],
+    "homepage": "https://github.com/radzikowski/Crafty-joystick",
+    "files": [
+		"joystick.js",
+    ]
+}
