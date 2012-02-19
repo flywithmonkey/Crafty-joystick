@@ -1,10 +1,10 @@
 {
     "name": "Joystick",
-    "version": "0.1",
-    "title": "Joystick for touch device",
+    "version": "0.2",
+    "title": "Joystick control for touch device",
     "author": {
         "name": "Radzikowski Piotr",
-        "url": ""
+        "url": "http://github.com/radzikowski"
     },
     "licenses": [
         {
@@ -16,9 +16,11 @@
             "url": "http://www.opensource.org/licenses/gpl-license.php"
         }
     ],
-    "description": "Joystick for touch mobile devices",
+    "description": "Joystick control for touch devices, imitation press on keyboard in crafty, fourway control - full configure, default imitation arrow buttons",
+    "jsfiddle": "http://jsfiddle.net/jkhhu/5/",
     "keywords": [
-        "joystick",
+        "Joystick",
+        "mobile device",
         "javascript",
         "Crafty"
     ],
