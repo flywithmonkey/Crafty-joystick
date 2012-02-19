@@ -9,9 +9,15 @@ Crafty.c('Joystick', {
 	_stick : null, 
 	_pressed : null,
 	_range: 20,
+    _keys: {
+        'up': Crafty.keys['UP_ARROW'],
+        'down': Crafty.keys['DOWN_ARROW'],
+        'left':Crafty.keys['LEFT_ARROW'],
+        'right': Crafty.keys['RIGHT_ARROW']
+    },
 
 	init: function() {
-		this.requires("Mouse");
+		this.requires("2D, Mouse");
 
 		return this;
 	},
@@ -29,8 +35,6 @@ Crafty.c('Joystick', {
     *		Crafty.e("2D, Canvas, stick").attr({ x: 100, y: 100 }),
     *		{ mouseSupport : true, range: 20 }
 	*	)	
-	*
-	*
     *
     * ~~~
     */
@@ -38,10 +42,21 @@ Crafty.c('Joystick', {
 		this._stick = stick; //(stick ? stick : this.buildJoystickStick() );
 		if (!this._stick) throw "Error: stick in joystick is not defined";
 
-		this._onUp(); // move stick entity to center of base entity
 		this._range = opts.range || 20;
 		this._setVisibility( this.isTouchScreenAvailable() || opts.mouseSupport );
 		this._initializeEvents(opts.mouseSupport);
+		if (opts.keys) {
+			this._keys['up'] = opts.keys['up'] || this._keys['up'];
+			this._keys['down'] = opts.keys['down'] || this._keys['down'];
+			this._keys['left'] = opts.keys['left'] || this._keys['left'];
+			this._keys['right'] = opts.keys['right'] || this._keys['right'];
+		}
+		this._onUp(); // move stick entity to center of base entity
+
+		this.bind("EnterFrame", function() {
+			this._interpretPosition();
+		});
+
 		return this;
 	},
     /**@
@@ -128,13 +143,15 @@ Crafty.c('Joystick', {
     *
     */
 	_onDown: function(event){
-		this._pressed = true;
 		var x = (this.isTouchScreenAvailable() ? event.touches[ 0 ].pageX : event.clientX ),
 			y = (this.isTouchScreenAvailable() ? event.touches[ 0 ].pageY : event.clientY ),
 			pos = Crafty.DOM.translate(x, y);
 
-		this._stick.x = pos.x - this._stick.w/2;
-		this._stick.y = pos.y - this._stick.h/2;
+		if ( this.isAt(pos.x, pos.y)) {
+			this._pressed = true;
+			this._stick.x = pos.x - this._stick.w/2;
+			this._stick.y = pos.y - this._stick.h/2;
+		}
 	},
     /**@
     * #._onMove
@@ -149,8 +166,12 @@ Crafty.c('Joystick', {
 				y = (this.isTouchScreenAvailable() ? event.touches[ 0 ].pageY : event.clientY ),
 				pos = Crafty.DOM.translate(x, y);
 
-			this._stick.x = pos.x - this._stick.w/2;
-			this._stick.y = pos.y - this._stick.h/2;
+			if (this.isAt(pos.x, pos.y)) {
+				this._stick.x = pos.x - this._stick.w/2;
+				this._stick.y = pos.y - this._stick.h/2;
+			} else {
+				this._onUp();
+			}		
 		}
 	},
     /**@
@@ -165,6 +186,40 @@ Crafty.c('Joystick', {
 		this._stick.x = this.x + this.w/2 - this._stick.w/2;
 		this._stick.y = this.y + this.h/2 - this._stick.h/2;
 	},
+	/**@
+    * #._interpretPosition
+    * @comp Joystick
+    * @sign public this ._interpretPosition()
+    *
+    */
+	_interpretPosition: function(){
+		var joystick = this;
+
+	    if (joystick.isUp() && (!Crafty.keydown[ joystick._keys['up'] ])){
+            Crafty.keyboardDispatch({'type':'keydown', 'keyCode' : joystick._keys['up'] });
+        } else if (Crafty.keydown[ joystick._keys['up'] ]){
+            Crafty.keyboardDispatch({'type':'keyup', 'keyCode' : joystick._keys['up'] });
+        }
+
+        if (joystick.isDown() && (!Crafty.keydown[ joystick._keys['down'] ])){
+            Crafty.keyboardDispatch({'type':'keydown', 'keyCode' : joystick._keys['down']});
+        } else if (Crafty.keydown[joystick._keys['down']]){
+            Crafty.keyboardDispatch({'type':'keyup', 'keyCode' : joystick._keys['down']});
+        }
+	
+		if (joystick.isRight() && (!Crafty.keydown[ joystick._keys['right'] ])){
+            Crafty.keyboardDispatch({'type':'keydown', 'keyCode' : joystick._keys['right'] });
+        } else if (Crafty.keydown[ joystick._keys['right'] ]){
+            Crafty.keyboardDispatch({'type':'keyup', 'keyCode' : joystick._keys['right'] });
+        }
+
+        if (joystick.isLeft() && (!Crafty.keydown[ joystick._keys['left'] ])){
+            Crafty.keyboardDispatch({'type':'keydown', 'keyCode' : joystick._keys['left'] });
+        } else if (Crafty.keydown[ joystick._keys['left'] ]){
+            Crafty.keyboardDispatch({'type':'keyup', 'keyCode' : joystick._keys['left'] });
+        }
+	},
+
     /**@
     * #.isTouchScreenAvailable
     * @comp Joystick
@@ -266,4 +321,5 @@ Crafty.c('Joystick', {
 	}		
 
 });
+
 
